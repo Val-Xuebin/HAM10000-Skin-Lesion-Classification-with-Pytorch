@@ -5,20 +5,21 @@ Deep learning project for skin lesion classification using PyTorch and HAM10000 
 
 ### Prerequisites
 
-Python 3.13.3 is included in venv/. CUDA-capable GPU is optional but recommended for faster training.
+Python 3.8 or higher. CUDA-capable GPU is optional but recommended for faster training.
 
 ### Installation
 
-Activate the virtual environment:
+Create and activate a virtual environment:
 
 ```
-source venv/bin/activate
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-Dependencies should already be installed in venv. If needed, install with:
+Install dependencies:
 
 ```
-pip install torch torchvision numpy pandas scikit-learn matplotlib tqdm pillow kaggle
+pip install -r requirements.txt
 ```
 
 ### Data Download
