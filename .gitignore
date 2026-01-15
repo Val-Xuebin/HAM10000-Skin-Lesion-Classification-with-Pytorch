@@ -1,0 +1,37 @@
+kaggle/
+input/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+ENV/
+
+# PyTorch
+*.pth
+*.pt
+checkpoints/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data (if large)
+# input/
+
+# Logs
+*.log
+logs/
