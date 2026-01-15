@@ -29,9 +29,6 @@ checkpoints/
 .DS_Store
 Thumbs.db
 
-# Data (if large)
-# input/
-
 # Logs
 *.log
 logs/
