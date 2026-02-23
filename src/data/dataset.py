@@ -73,8 +73,9 @@ class HAM10000(Dataset):
         return len(self.df)
 
     def __getitem__(self, index):
-        X = Image.open(self.df['path'][index])
-        y = torch.tensor(int(self.df['cell_type_idx'][index]))
+        # Use iloc to access by position index instead of DataFrame index
+        X = Image.open(self.df.iloc[index]['path'])
+        y = torch.tensor(int(self.df.iloc[index]['cell_type_idx']))
 
         if self.transform:
             X = self.transform(X)

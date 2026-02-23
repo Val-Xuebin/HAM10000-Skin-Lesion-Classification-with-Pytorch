@@ -33,3 +33,12 @@ Thumbs.db
 # Logs
 *.log
 logs/
+
+# Experiment and run outputs
+results/
+ablation_results/
+wandb/
+training_curves.png
+test_confusion_matrix.png
+test_confusion_matrix_normalized.png
+test_roc_curves.png

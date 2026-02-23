@@ -3,6 +3,7 @@ import sys
 import pandas as pd
 from glob import glob
 from sklearn.model_selection import train_test_split
+import numpy as np
 
 # Add parent directory to path for config import
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -46,31 +47,52 @@ def identify_duplicates(df_original):
     return df_original
 
 
-def split_train_val(df_original):
-    """Split data into train and validation sets"""
+def split_train_val_test(df_original):
+    """Split data into train (70%), validation (20%), and test (10%) sets"""
     df_undup = df_original[df_original['duplicates'] == 'unduplicated']
     
     y = df_undup['cell_type_idx']
-    _, df_val = train_test_split(
+    # First split: 70% train, 30% temp (val + test)
+    df_train, df_temp = train_test_split(
         df_undup, 
-        test_size=config.VAL_SIZE, 
+        test_size=(config.VAL_SIZE + config.TEST_SIZE),
         random_state=config.RANDOM_STATE, 
         stratify=y
     )
     
-    def get_val_rows(x):
+    # Second split: split temp into 20% val and 10% test
+    # Calculate the ratio for the second split
+    y_temp = df_temp['cell_type_idx']
+    val_ratio = config.VAL_SIZE / (config.VAL_SIZE + config.TEST_SIZE)
+    df_val, df_test = train_test_split(
+        df_temp,
+        test_size=(1 - val_ratio),  # This gives us test_size / (val_size + test_size)
+        random_state=config.RANDOM_STATE,
+        stratify=y_temp
+    )
+    
+    # Map all data (including duplicates) to train/val/test
+    def get_split(x):
+        train_list = list(df_train['image_id'])
         val_list = list(df_val['image_id'])
-        if str(x) in val_list:
+        test_list = list(df_test['image_id'])
+        if str(x) in train_list:
+            return 'train'
+        elif str(x) in val_list:
             return 'val'
+        elif str(x) in test_list:
+            return 'test'
         else:
+            # Duplicates go to train set
             return 'train'
     
-    df_original['train_or_val'] = df_original['image_id']
-    df_original['train_or_val'] = df_original['train_or_val'].apply(get_val_rows)
+    df_original['split'] = df_original['image_id'].apply(get_split)
     
-    df_train = df_original[df_original['train_or_val'] == 'train']
+    df_train_all = df_original[df_original['split'] == 'train']
+    df_val_all = df_original[df_original['split'] == 'val']
+    df_test_all = df_original[df_original['split'] == 'test']
     
-    return df_train, df_val
+    return df_train_all, df_val_all, df_test_all
 
 
 def balance_classes(df_train, data_aug_rate):
