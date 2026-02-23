@@ -1,27 +1,27 @@
 #!/bin/bash
-# Kaggle API 配置脚本
+# Kaggle API setup script
 
-echo "Kaggle API 配置助手"
-echo "==================="
+echo "Kaggle API Setup"
+echo "================"
 echo ""
-echo "请选择配置方式："
-echo "1. 使用环境变量（临时，仅当前会话有效）"
-echo "2. 创建 kaggle.json 文件（永久配置）"
+echo "Choose configuration method:"
+echo "1. Use environment variables (temporary, current session only)"
+echo "2. Create kaggle.json file (persistent)"
 echo ""
-read -p "请选择 (1 或 2): " choice
+read -p "Choose (1 or 2): " choice
 
 if [ "$choice" = "1" ]; then
-    read -p "请输入你的 Kaggle 用户名: " username
-    read -p "请输入你的 Kaggle API Key: " key
+    read -p "Enter your Kaggle username: " username
+    read -p "Enter your Kaggle API key: " key
     export KAGGLE_USERNAME="$username"
     export KAGGLE_KEY="$key"
     echo ""
-    echo "✓ 环境变量已设置（仅当前终端会话有效）"
-    echo "现在可以运行: python main.py --mode train"
+    echo "Environment variables set (current terminal session only)."
+    echo "You can run: python main.py --mode train"
     
 elif [ "$choice" = "2" ]; then
-    read -p "请输入你的 Kaggle 用户名: " username
-    read -p "请输入你的 Kaggle API Key: " key
+    read -p "Enter your Kaggle username: " username
+    read -p "Enter your Kaggle API key: " key
     
     mkdir -p ~/.kaggle
     cat > ~/.kaggle/kaggle.json << EOF
@@ -32,10 +32,9 @@ elif [ "$choice" = "2" ]; then
 EOF
     chmod 600 ~/.kaggle/kaggle.json
     echo ""
-    echo "✓ kaggle.json 文件已创建在 ~/.kaggle/kaggle.json"
-    echo "现在可以运行: python main.py --mode train"
+    echo "kaggle.json created at ~/.kaggle/kaggle.json"
+    echo "You can run: python main.py --mode train"
 else
-    echo "无效的选择"
+    echo "Invalid choice."
     exit 1
 fi
-
